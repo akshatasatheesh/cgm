@@ -1,0 +1,8 @@
+kaggle
+  https://www.kaggle.com/competitions/dig-4-bio-raman-transfer-learning-challenge/data 
+  https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes?utm_source=chatgpt.com
+
+iBB 
+  https://ibb.tecnico.ulisboa.pt/join-the-dig4bio-raman-transfer-learning-challenge/
+
+https://www.spiedigitallibrary.org/journals/journal-of-biomedical-optics/vo[...]02.full?utm_source=chatgpt.com GITHUB https://github.com/mr-sheg/orpl
