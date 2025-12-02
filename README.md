@@ -39,7 +39,7 @@ Physics-informed depth-mixing and meta-learning do not improve deep-layer glucos
 
 ## Materials
 	•	Python Code with PINN and Meta-Learning.
-	•	Zhang et al paper’s Zenodo repository for reproducibility baselines.
+	•	Zhang et al. paper’s Zenodo repository for reproducibility baselines.
 
 ## Safety/Ethics
 	•	Secondary analysis of de-identified human data under NDA; no new data collection.
