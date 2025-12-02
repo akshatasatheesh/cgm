@@ -1,53 +1,54 @@
-# cgm
+# Physics-Informed Meta-Learning for Depth-Selective Raman (mμSORS) Glucose Monitoring
 
-Project Title:  Enhanced Raman Light - Needle(ss) Glucose Monitoring 
-Diabetes affects hundreds of millions worldwide, yet continuous glucose monitoring (CGM) still depends on invasive sensors that puncture the skin. Since the 1990s, researchers at MIT, Harvard, and elsewhere have explored Raman spectroscopy as a noninvasive alternative, using light scattering to capture glucose’s unique vibrational signature. The challenge is that glucose peaks are faint and often buried in complex tissue spectra dominated by water, proteins, and lipids. Recent advances in physics, such as depth-selective Raman using microscopic spatially offset Raman spectroscopy (mµSORS, Nature Biomedical Engineering 2021), show that smarter optics can enhance glucose signals by probing beneath the skin surface. 
-My project builds on the latest advances in depth-selective Raman spectroscopy (mµSORS) and borrows ideas from coherent anti-Stokes Raman scattering (CARS). While CARS is a powerful but complex laser-based technique that boosts weak Raman signals and suppresses background noise, I aim to simulate some of those benefits in software rather than hardware. I will generate layered “tissue-like” spectra where surface signals dominate and deeper glucose peaks are faint, and then test whether simple AI models such as multivariate regression can separate surface from deep contributions and estimate glucose concentration. I’m modeling glucose signals in tissue while simulating different skin tones (light → dark) with varying fluorescence backgrounds.I’ll use meta-learning so the model adapts in a few samples per person, overcoming skin-color–driven spectral variation. Inspired by CARS, I will explore algorithmic “signal boosting” for glucose peaks and “background suppression” to reduce interference from water, lipids, and proteins. To probe robustness, I will add systematic stress tests: noise sweeps, baseline drift, wavenumber jitter, and background shifts in collagen:lipid:water ratios. In addition, I will run feature selection to identify a minimal set of Raman peaks (as few as 3–5 wavenumbers) that still predict glucose accurately, and compare performance against full-spectrum and random-peak baselines. Finally, I will use multi-offset spectra (two or more collection points) to mathematically “unmix” surface and deep signals, showing how accuracy improves for the deeper glucose contribution. By mapping when the models work, what breaks them, and how little spectral information is needed, this project highlights both the promise and limitations of AI-enabled Raman CGM—and shows how CARS-inspired ideas could make mµSORS simpler, cheaper, and more practical for noninvasive diabetes monitoring.
-Question/Purpose: 
-Can Physics Informed AI models inspired by coherent anti-Stokes Raman scattering (CARS) improve the accuracy of noninvasive glucose prediction from simulated depth-selective Raman (mµSORS) spectra by enhancing glucose signal and suppressing background noise
-Hypothesis: 
-If Raman spectra are processed using AI methods that simulate CARS-like signal boosting and background suppression within a physics-informed neural network (PINN) framework, where the CARS forward model—including nonlinear polarization, phase matching, and non-resonant background terms—is embedded as a differentiable constraint, and if meta-learning is applied to adapt across varying skin tones, fluorescence levels, and tissue conditions, then glucose peaks from deeper tissue layers can be extracted more accurately. This will lead to improved and personalized glucose prediction performance compared to purely data-driven, non-physics baselines.
-Null hypothesis (H0)
-A PINN with an embedded differentiable CARS forward model (including nonlinear polarization, phase matching, and NRB) plus meta-learning does not improve deep-layer glucose peak extraction or glucose prediction performance compared with physics-agnostic, purely data-driven baselines.
-Independent Variable (IV):
-   Light parameters:
-      Raman peak intensities. Intensity values at selected wavenumbers 
-   Tissue parameters:
-      Skin tone (light, dark and others)
-      Noise level
-      Collagen:lipid:water ratios,
-      Signal boosting / background suppression parameters
-   AI parameters:   
-      AI model type and training method (e.g., multivariate regression, meta-learning)
-Control Variables:
-   Glucose peak positions
-   Consistent simulation conditions for each test
-   Spectral resolution & laser wavelength
-   Baseline noise and fluorescence kept constant for non-glucose signals
-Dependent Variable (DV): 
-The predicted glucose concentration in tissue (mg/dL or relative units). The accuracy of this prediction is evaluated by comparing it against the known ground truth glucose values used in the simulation.
-Materials:
-   Computer with Python or MATLAB
-   AI/ML libraries
-   Code to simulate layered tissue spectra
-   Tools for feature selection like PCA and multi-offset spectral analysis in data
-Research Summary:
-Continuous glucose monitoring (CGM) remains invasive, requiring sensors that puncture the skin. Over the past three decades, researchers have explored Raman spectroscopy as a noninvasive alternative because it captures a molecular fingerprint of glucose based on light scattering (Scholtes-Timmerman et al., 2015). However, the main limitation has been that glucose peaks are faint and buried under stronger background signals from water, lipids, and proteins (Min et al., 2025). Recent advances in depth-selective Raman techniques, such as microscopic spatially offset Raman spectroscopy (mµSORS), have improved sensitivity by probing below the skin surface, demonstrating measurable glucose signals through tissue (Zhang et al., 2025). Still, mµSORS remains limited by optical complexity and spectral overlap, especially across different skin tones and fluorescence backgrounds. Meanwhile, researchers in biomedical AI have shown that machine learning and regression models can extract hidden Raman features to classify or estimate glucose concentrations, but most studies rely on single, shallow models that don’t generalize across conditions (Quang et al., 2024). Inspired by coherent anti-Stokes Raman scattering (CARS) — a nonlinear laser method that boosts weak signals and suppresses noise — this project proposes a software-based “virtual CARS” approach, applying AI to amplify glucose peaks and subtract background interference. By simulating layered, tissue-like spectra under varying skin tones, noise levels, and optical offsets, the project tests whether AI can reproduce the benefits of complex hardware through computation. This directly addresses the gap between optical hardware innovation and practical, affordable noninvasive CGM — justifying the question of whether CARS-inspired algorithms can enhance mµSORS-style Raman data for glucose prediction.
-Safety/Ethics:
-Entirely software-based; no humans or animals involved, fully safe and ethical.
-Expected Outcome:
-AI-based “virtual CARS” processing will improve non-invasive continuous glucose monitoring (cgm) detection accuracy. The project will also identify a minimal Raman fingerprint (3–5 key peaks) sufficient for reliable glucose prediction.
+## Motivation & Context
+Non-invasive glucose monitoring is clinically valuable but has struggled with accuracy and calibration needs. The mμSORS approach captures depth-selective spontaneous Raman signals from skin. In a Nature Metabolism study, researchers first identified the optimal depth (at/just below the dermal–epidermal junction) in 35 individuals, then modeled 230 participants, achieving MARD 14.6% with 99.4% of results in consensus error grid (CEG) zones A+B without personalized calibration—a strong clinical demonstration. I will analyze the authors’ shared multi-offset dataset to test whether physics-informed neural netwoks (PINN) and meta-learning methods can further improve robustness and per-subject adaptation.
 
-CARS-Inspired Enhancements (Innovation Summary)
-In my project, I draw inspiration from several key principles of Coherent Anti-Stokes Raman Scattering (CARS) and translate them into software-based analogies. Just as CARS achieves coherent signal boosting by amplifying weak molecular vibrations, my model mimics this by giving extra weight to known glucose peaks during regression, enhancing their prominence over noise. CARS also uses multi-frequency excitation, combining multiple laser wavelengths to probe molecules more effectively; in my simulation, I replicate this by merging spectra from multiple spatial offsets or wavelengths to better isolate the glucose signal from deeper tissue layers. To address unwanted fluorescence and tissue background, I apply algorithmic background suppression through subtraction or orthogonal regression—an AI equivalent of CARS’ ability to cancel out noise optically. Similarly, where CARS achieves targeted molecular selectivity by tuning to specific chemical bonds, my model focuses on a minimal set of glucose fingerprint peaks identified through feature selection. Finally, I incorporate nonlinear enhancement using meta-learning so the AI can adapt to individual skin tones and tissue differences, simulating how CARS dynamically corrects for nonlinear variations in optical response. Together, these strategies reimagine complex CARS physics as a set of intelligent computational tools for enhancing Raman-based glucose detection.
-References:
-{very latest} https://gwern.net/doc/biology/2025-zhang.pdf?utm_source=chatgpt.com
-https://arxiv.org/pdf/2510.06020 
-{Latest} Yifei Zhang et al Subcutaneous depth-selective spectral imaging with mμSORS enables noninvasive glucose monitoring https://www.nature.com/articles/s42255-025-01217-w 
-Shunhua Min, Haoyang Geng, Yuheng He, Tailin Xu, Qingzhou Liu, and Xueji Zhang 
-Minimally and non-invasive glucose monitoring: the road toward commercialization
-https://pubs.rsc.org/en/content/articlehtml/2025/sd/d4sd00360h
-Tri Ngo Quang, Thanh Tung Nguyen & Huong Pham Thi Viet  Machine Learning Approach for Early Detection of Diabetes Using Raman Spectroscopy https://link.springer.com/article/10.1007/s11036-024-02340-w
-Maarten J Scholtes-Timmerman, Sabina Bijlsma, Marion J Fokkert, Robbert Slingerland, Sjaak J F van Veen Raman Spectroscopy as a Promising Tool for Noninvasive Point-of-Care Glucose Monitoring https://pmc.ncbi.nlm.nih.gov/articles/PMC4455378/
-Kaggle dataset - https://www.kaggle.com/datasets/codina/raman-spectroscopy-of-diabetes/code
-https://www.dexcom.com/all-access/dexcom-cgm-explained/direct-to-apple-watch
+## Question / Purpose
+Do physics-informed multi-offset demixing and few-shot meta-learning improve glucose prediction accuracy and adaptability on real mμSORS human data versus standard deep-learning baselines?
+
+## Hypothesis
+A PINN that (i) models offset-dependent depth mixing with sensitivity kernels, (ii) enforces Beer–Lambert proportionality at glucose-relevant peaks, non-negativity, spectral smoothness, fingerprint-peak stability, and peak-shape priors, and (iii) uses meta-learning for few-shot personalization across subjects will reduce MARD. Incorporating a time-lag parameter τ to align Raman-derived estimates with venous plasma glucose (as analyzed in the paper, optimized around ~13–16 minutes) will further improve performance.
+
+## Null Hypothesis (H0)
+Physics-informed depth-mixing and meta-learning do not improve deep-layer glucose extraction or clinical metrics (MARD, CEG A/B) over physics-agnostic baselines on the mμSORS dataset.
+
+## Independent Variables (IVs)
+	•	Acquisition/analysis: spatial offset(s) used; time-lag τ alignment setting; spectral pre-processing choices (baseline correction, normalization).
+	•	Modeling: presence/absence and weights of physics losses (Beer–Lambert, non-negativity, smoothness, fingerprint, peak-shape); meta-learning vs. pooled training; adapter type (e.g., IA³/LoRA) and K-shot.
+	•	Subject factors: cohort splits (subject-wise CV; independent test).
+
+## Control Variables
+	•	Wavenumber grid & spectral resolution; laser wavelength; consistent preprocessing pipeline; fixed train/validation/test protocol mirroring the paper’s subject-wise evaluation and independent test cohort.
+
+## Dependent Variables (DVs)
+	•	Primary: MARD vs. reference venous plasma glucose; CEG zone distribution (A/B).
+	•	Secondary: RMSE/R², Bland–Altman limits, robustness to baseline drift and noise.
+
+# Methods
+
+	1.	Data & Governance: Use the shared mμSORS dataset (multi-offset skin spectra with reference glucose) under NDA; no redistribution; de-identified storage. Paper notes source data and Zenodo code for re-analysis.
+	2.	Preprocessing: Use Zenodo code as much as possible. Plus, cosmic-ray removal, baseline correction and normalization. 
+	3.	Baselines: replicate PLS results; include paper-style subject-wise CV and independent test evaluation.
+	4.	Physics-Informed Model:
+   
+   •	Depth mixing: $`\hat{I}_{\text{offset}}(\nu)=\sum_z W(\text{offset},z)\,I_z(\nu);`$ penalize residuals between measured and reconstructed offset spectra.          
+	•	Loss: $`\mathcal L=\mathcal L_{\text{data}}+\lambda_1 \mathcal L_{\text{Beer–Lambert}}+\lambda_2 \mathcal L_{\text{nonneg}}+\lambda_3 \mathcal L_{\text{smooth}}+\lambda_4 \mathcal L_{\text{fingerprint}}+\lambda_5 \mathcal L_{\text{peakshape}}+\lambda_6\mathcal L_{\text{mixing}}.`$          
+   •	Time-lag τ: jointly estimate or grid-search τ to align spectral predictions with reference glucose (paper optimizes around −13 to −16 min).          
+	5.	Meta-Learning: treat each subject as a task; few-shot inner-loop adaptation (update small adapters) and outer-loop objective measured on held-out samples per subject.         
+	6.	Evaluation: report MARD and CEG A/B on CV folds and independent test set; plot few-shot curves (K=0/5/10/20).
+
+## Materials
+	•	Python Code with PINN and Meta-Learning.
+	•	Zhang et al paper’s Zenodo repository for reproducibility baselines.
+
+## Safety/Ethics
+	•	Secondary analysis of de-identified human data under NDA; no new data collection.
+	•	Cite Original Paper in the final paper published 
+
+## Expected Outcome
+Compared with PLS, the PINN + meta-learning pipeline will match or improve clinical metrics (lower MARD, higher CEG A/B), reduce few-shot calibration needs, and yield interpretable depth-aware models.
+
+## References (key)
+	•	Zhang et al. “Subcutaneous depth-selective spectral imaging with mμSORS enables noninvasive glucose monitoring,” Nature Metabolism, 2025 — abstract (35→230 participants; MARD 14.6%, CEG A+B 99.4%; subject-wise CV; time-lag optimization); source data available; code on Zenodo.
+	•	News & Views discussing mμSORS advantages for layered detection.
+	•	Institutional press describing dataset scale and clinical metrics.
